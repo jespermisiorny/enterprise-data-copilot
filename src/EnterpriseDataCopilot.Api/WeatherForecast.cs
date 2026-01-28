@@ -1,4 +1,4 @@
-namespace Api;
+namespace EnterpriseDataCopilot.Api;
 
 public class WeatherForecast
 {
