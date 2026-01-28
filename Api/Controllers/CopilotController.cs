@@ -69,9 +69,9 @@ public class CopilotController : ControllerBase
         var evidence = relevantDocs.Select(d => d.Id).ToArray();
 
         var response = new CopilotResponse(
-Summary: citations.Length > 0
-    ? $"Hittade {citations.Length} relevanta källor och genererade insikter baserat på dessa."
-    : "Jag hittade inga matchande källor för den frågan. Prova att vara mer specifik eller ställ en följdfråga.",
+            Summary: citations.Length > 0
+                ? $"Hittade {citations.Length} relevanta källor och genererade insikter baserat på dessa."
+                : "Jag hittade inga matchande källor för den frågan. Prova att vara mer specifik eller ställ en följdfråga.",
 
             Confidence: "medium",
             Insights: new[]

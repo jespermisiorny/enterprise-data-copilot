@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Api",
+    "\\Api\\Audit",
+    "\\Api\\Contracts",
+    "\\Api\\Controllers",
+    "\\Api\\Docs",
+    "\\docs",
+    "\\web"
+  ],
+  "SelectedNode": "\\Api\\Controllers\\CopilotController.cs",
+  "PreviewInSolutionExplorer": false
+}
