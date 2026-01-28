@@ -7,26 +7,21 @@ public sealed class SqlQueryBuilder : ISqlQueryBuilder
 {
     public SqlQuery Build(QueryPlan plan)
     {
-        // MVP-antaganden (vi gör det tydligt och enkelt):
-        // - Facts: FactSales f
-        // - Time: DimTime t
-        // - Join: f.TimeKey = t.TimeKey
-        // - t.Date är ett datefält (eller view som exponerar datum)
-        //
-        // Du kan senare flytta dessa till docs/domain/sources.md och göra det konfigurerbart.
-
         var p = new Dictionary<string, object>
         {
-            ["from"] = plan.Time.From.ToString("yyyy-MM-dd"),
-            ["to"] = plan.Time.To.ToString("yyyy-MM-dd")
+            ["from"] = plan.Time.From.ToDateTime(TimeOnly.MinValue),
+            ["to"] = plan.Time.To.ToDateTime(TimeOnly.MaxValue)
         };
 
-        // Grouping (MVP)
-        var groupBy = (plan.GroupBy ?? string.Empty).Trim();
+        var groupBy = (plan.GroupBy ?? "").Trim();
+        if (!string.IsNullOrEmpty(groupBy) &&
+            !groupBy.Equals("Month", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException($"Unsupported groupBy: {groupBy}");
+        }
+
         var hasMonthGrouping = groupBy.Equals("Month", StringComparison.OrdinalIgnoreCase);
 
-        // SELECT-lista
-        // (Om groupBy=Month: inkludera Year+Month i både select och group by)
         var selectParts = new List<string>();
         var groupByParts = new List<string>();
         var orderByParts = new List<string>();
@@ -46,12 +41,12 @@ public sealed class SqlQueryBuilder : ISqlQueryBuilder
 
         // Bas-SQL
         var sql = $@"
-SELECT
-  {string.Join(",\n  ", selectParts)}
-FROM FactSales f
-JOIN DimTime t ON f.TimeKey = t.TimeKey
-WHERE t.[Date] >= @from AND t.[Date] <= @to
-".Trim();
+                SELECT
+                  {string.Join(",\n  ", selectParts)}
+                FROM FactSales f
+                JOIN DimTime t ON f.TimeKey = t.TimeKey
+                WHERE t.[Date] >= @from AND t.[Date] <= @to
+                ".Trim();
 
         // Filters (MVP: bara “=” på dimfält)
         // plan.Filters kan senare bli typed filters; här är det medvetet simpelt.
