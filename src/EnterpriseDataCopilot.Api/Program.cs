@@ -2,6 +2,8 @@ using EnterpriseDataCopilot.Application.Abstractions;
 using EnterpriseDataCopilot.Application.Copilot.Time;
 using EnterpriseDataCopilot.Infrastructure.Audit;
 using EnterpriseDataCopilot.Infrastructure.Time;
+using EnterpriseDataCopilot.Application.Copilot.Ask;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddSwaggerGen();
 // Insaight-grund: tid + audit
 builder.Services.AddSingleton<IClock, SystemClock>();
 builder.Services.AddSingleton<ITimeContextResolver, TimeContextResolver>();
+
+// Copilot
+builder.Services.AddSingleton<AskCopilotHandler>();
 
 // Filbaserad audit (rekommenderas)
 var auditPath = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "audit.jsonl");

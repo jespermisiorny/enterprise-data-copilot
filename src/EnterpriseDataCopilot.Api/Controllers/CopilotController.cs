@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using EnterpriseDataCopilot.Application.Abstractions;
+using EnterpriseDataCopilot.Application.Copilot.Ask;
 
 namespace EnterpriseDataCopilot.Api.Controllers;
 
@@ -30,4 +31,15 @@ public sealed class CopilotController : ControllerBase
         var items = await audit.ReadLatestAsync(take: 50, ct);
         return Ok(items);
     }
+
+    [HttpPost("ask")]
+    public async Task<IActionResult> Ask(
+    [FromBody] AskCopilotRequest request,
+    [FromServices] AskCopilotHandler handler,
+    CancellationToken ct)
+    {
+        var plan = await handler.HandleAsync(request, ct);
+        return Ok(plan);
+    }
+
 }
