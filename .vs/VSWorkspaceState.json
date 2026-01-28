@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Api",
+    "\\Api\\Controllers",
+    "\\src",
+    "\\src\\EnterpriseDataCopilot.Application",
+    "\\src\\EnterpriseDataCopilot.Application\\Copilot",
+    "\\src\\EnterpriseDataCopilot.Application\\Copilot\\Metrics"
+  ],
+  "SelectedNode": "\\src\\EnterpriseDataCopilot.Application\\EnterpriseDataCopilot.Application.csproj",
+  "PreviewInSolutionExplorer": false
+}
