@@ -1,2 +1,3 @@
 {"TimestampUtc":"2026-01-28T08:18:05.4859384+00:00","EventType":"Health","Message":"Copilot API is alive","Meta":null}
 {"TimestampUtc":"2026-01-28T08:43:30.2709991+00:00","EventType":"AskPlanned","Message":"Hur gick nettooms\u00E4ttningen f\u00F6rra \u00E5ret?","Meta":{"planId":"7eb15678b9af460a97422fcbf5841503","metricKey":"net_revenue","timeKind":"PreviousYear","from":"2025-01-01","to":"2025-12-31","groupBy":"Month"}}
+{"TimestampUtc":"2026-01-28T08:56:42.5479951+00:00","EventType":"AskPlanned","Message":"Hur gick nettooms\u00E4ttningen f\u00F6rra \u00E5ret?","Meta":{"planId":"b30e4bd7f5ce4e9bb09f053eda987ada","metricKey":"net_revenue","timeKind":"PreviousYear","from":"2025-01-01","to":"2025-12-31","groupBy":"Month"}}

@@ -38,8 +38,8 @@ public sealed class CopilotController : ControllerBase
     [FromServices] AskCopilotHandler handler,
     CancellationToken ct)
     {
-        var plan = await handler.HandleAsync(request, ct);
-        return Ok(plan);
+        var result = await handler.HandleAsync(request, ct);
+        return Ok(result);
     }
 
 }

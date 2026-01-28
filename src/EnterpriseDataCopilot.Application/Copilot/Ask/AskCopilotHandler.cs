@@ -10,22 +10,23 @@ public sealed class AskCopilotHandler
     private readonly ITimeContextResolver _time;
     private readonly IClock _clock;
     private readonly IAuditWriter _audit;
+    private readonly ISqlQueryBuilder _sql;
 
-    public AskCopilotHandler(ITimeContextResolver time, IClock clock, IAuditWriter audit)
+    public AskCopilotHandler(ITimeContextResolver time, IClock clock, IAuditWriter audit, ISqlQueryBuilder sql)
     {
         _time = time;
         _clock = clock;
         _audit = audit;
+        _sql = sql;
     }
 
-    public async Task<QueryPlan> HandleAsync(AskCopilotRequest request, CancellationToken ct)
+    public async Task<AskCopilotResponse> HandleAsync(AskCopilotRequest request, CancellationToken ct)
     {
         var question = (request.Question ?? string.Empty).Trim();
 
         var today = DateOnly.FromDateTime(_clock.UtcNow.UtcDateTime);
         var time = _time.Resolve(question, today);
 
-        // MVP: välj metric hårdkodat (sen gör vi metric-resolver)
         const string metricKey = "net_revenue";
         var metric = MetricsRegistry.All[metricKey];
 
@@ -33,9 +34,11 @@ public sealed class AskCopilotHandler
             PlanId: Guid.NewGuid().ToString("N"),
             Metric: metric,
             Time: time,
-            GroupBy: "Month", // MVP: default (kan vara null)
+            GroupBy: "Month", 
             Filters: new Dictionary<string, string>()
         );
+
+        var sqlQuery = _sql.Build(plan);
 
         await _audit.WriteAsync(new AuditEntry(
             TimestampUtc: _clock.UtcNow,
@@ -52,6 +55,6 @@ public sealed class AskCopilotHandler
             }
         ), ct);
 
-        return plan;
+        return new AskCopilotResponse(plan, sqlQuery);
     }
 }
